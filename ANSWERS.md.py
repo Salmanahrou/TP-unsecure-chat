@@ -1,4 +1,4 @@
-Que pensez-vous de la confidentialité des données vis à vis du serveur? La confidentialité des données n'est pas garantie car les messages sont envoyés en clair entre les clients et le serveur,une interception des paquets permettrait de lire toutes les communications et l'absence de chiffrement expose les utilisateurs à des attaques de type "Man-in-the-Middle" (MITM).
+.Que pensez-vous de la confidentialité des données vis à vis du serveur? La confidentialité des données n'est pas garantie car les messages sont envoyés en clair entre les clients et le serveur,une interception des paquets permettrait de lire toutes les communications et l'absence de chiffrement expose les utilisateurs à des attaques de type "Man-in-the-Middle" (MITM).
 
 Pouvez vous expliquer en quoi la sérialisation pickle est certainement le plus mauvais choix ? parceque le pickle permet l'exécution de code arbitraire lorsqu'un objet est désérialisé et un attaquant peut injecter un objet malveillant exécutant du code à la réception.
 
